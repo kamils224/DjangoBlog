@@ -46,7 +46,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('comment_id', 'text', 'article_id', 'author')
+        fields = ('comment_id', 'text', 'article_id', 'owner')
 
 
 class RatingSerializer(serializers.ModelSerializer):
@@ -57,4 +57,4 @@ class RatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rating
-        fields = ('rating_id', 'rate', 'article_id', 'author')
+        fields = ('rating_id', 'rate', 'article_id', 'owner')
