@@ -47,6 +47,7 @@ class Comment(models.Model):
     text = models.CharField(max_length=250)
     article_id = models.ForeignKey(Article, on_delete=models.CASCADE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    datetime_added = models.DateTimeField(auto_now_add=True, blank=True)
 
 
 class Rating(models.Model):
