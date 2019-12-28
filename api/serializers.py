@@ -14,7 +14,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user
 
 
-class CategorySerializier(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('category_id', 'category_name')
