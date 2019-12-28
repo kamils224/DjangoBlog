@@ -10,6 +10,7 @@ from rest_framework.authtoken.views import obtain_auth_token
 # Additionally, we include login URLs for the browsable API.
 
 urlpatterns = [
+    path('', admin.site.urls),
     path('admin/', admin.site.urls),
     path('api/', include(urls)),
     path('api-token-auth/', obtain_auth_token)

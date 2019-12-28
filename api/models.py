@@ -27,7 +27,7 @@ class Article(models.Model):
     article_id = models.AutoField(primary_key=True)
     article_heading = models.CharField(max_length=32)
     article_body = models.TextField(max_length=256)
-    image = models.ImageField()
+    image = models.ImageField(blank=True)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True)
     datetime_added = models.DateTimeField(auto_now_add=True, blank=True)
@@ -52,6 +52,6 @@ class Comment(models.Model):
 
 class Rating(models.Model):
     rating_id = models.AutoField(primary_key=True)
-    rate = models.FloatField
+    rate = models.FloatField(default=0.0)
     article_id = models.ForeignKey(Article, on_delete=models.CASCADE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

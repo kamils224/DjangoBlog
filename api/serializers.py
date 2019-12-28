@@ -21,9 +21,15 @@ class CategorySerializier(serializers.ModelSerializer):
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+
+    def validate(self, attrs):
+        attrs['owner'] = self.context['request'].user
+        return attrs
+
     class Meta:
         model = Article
         fields = ('article_id', 'article_heading', 'article_body', 'image', 'owner', 'category', 'datetime_added')
+        read_only_fields = ['owner']
 
 
 class ArticleImageSerializer(serializers.ModelSerializer):
