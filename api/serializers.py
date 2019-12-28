@@ -39,12 +39,22 @@ class ArticleImageSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+
+    def validate(self, attrs):
+        attrs['owner'] = self.context['request'].user
+        return attrs
+
     class Meta:
         model = Comment
         fields = ('comment_id', 'text', 'article_id', 'author')
 
 
 class RatingSerializer(serializers.ModelSerializer):
+
+    def validate(self, attrs):
+        attrs['owner'] = self.context['request'].user
+        return attrs
+
     class Meta:
         model = Rating
         fields = ('rating_id', 'rate', 'article_id', 'author')

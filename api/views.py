@@ -2,6 +2,7 @@ import django_filters
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 
@@ -30,7 +31,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUserOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
 
     def destroy(self, request, *args, **kwargs):
@@ -47,14 +48,15 @@ class ArticleImageViewSet(viewsets.ModelViewSet):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+    http_method_names = ['post', 'delete', 'put']
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
 
 
 class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
