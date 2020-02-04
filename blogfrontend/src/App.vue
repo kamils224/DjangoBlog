@@ -11,7 +11,17 @@ export default {
   name: 'app',
   components: {
     Blog,
+  },
+  created() {
+  this.$store.dispatch("getArticlesAction");
   }
 }
 </script>
+
+<style>
+  #app{
+    background: wheat;
+    min-height: 100vh;
+  }
+</style>
 

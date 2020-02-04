@@ -17,7 +17,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('category_id', 'category_name')
+        fields = ('id', 'category_name')
 
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -28,14 +28,14 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ('article_id', 'article_heading', 'article_body', 'image', 'owner', 'category', 'datetime_added')
+        fields = ('id', 'article_heading', 'article_body', 'image', 'owner', 'category', 'datetime_added')
         read_only_fields = ['owner']
 
 
 class ArticleImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArticleImage
-        fields = ('image_id', 'image', 'article_id')
+        fields = ('id', 'image', 'article_id')
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -46,7 +46,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = ('comment_id', 'text', 'article_id', 'owner')
+        fields = ('id', 'text', 'article_id', 'owner')
 
 
 class RatingSerializer(serializers.ModelSerializer):
@@ -57,4 +57,4 @@ class RatingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rating
-        fields = ('rating_id', 'rate', 'article_id', 'owner')
+        fields = ('id', 'rate', 'article_id', 'owner')

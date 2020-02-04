@@ -1,12 +1,12 @@
 import django_filters
 from django.contrib.auth.models import User
-from rest_framework import viewsets
+from rest_framework import viewsets, serializers
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 
-from api.serializers import UserSerializer, CommentSerializer, CategorySerializier, RatingSerializer, \
+from api.serializers import UserSerializer, CommentSerializer, CategorySerializer, RatingSerializer, \
     ArticleImageSerializer
 from .models import Article, Comment, Category, Rating, ArticleImage
 from .serializers import ArticleSerializer
@@ -23,7 +23,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
-    serializer_class = CategorySerializier
+    serializer_class = CategorySerializer
     permission_classes = [IsAdminUser]
 
 
@@ -31,13 +31,13 @@ class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly | IsAdminUser]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
 
     def destroy(self, request, *args, **kwargs):
         article = self.get_object()
         article.delete()
-        return Response('Article was deleted')
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ArticleImageViewSet(viewsets.ModelViewSet):
