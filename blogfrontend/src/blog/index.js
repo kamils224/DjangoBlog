@@ -42,7 +42,7 @@ export default new Vuex.Store({
                 await Axios.put(articlesUrl, article);
             }
             context.commit("saveArticle", article);
-        }
+        },
     },
     getters:{
         chunkedArticles: state => {return chunk(state.articles,3);}

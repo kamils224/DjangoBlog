@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+from django.core.validators import MaxValueValidator, MinValueValidator
 from PIL import Image
 
 
@@ -24,12 +25,13 @@ class Category(models.Model):
 
 
 class Article(models.Model):
-    article_heading = models.CharField(max_length=32)
-    article_body = models.TextField(max_length=2500)
+    article_heading = models.CharField(max_length=20)
+    article_body = models.TextField(max_length=10000)
     image = models.ImageField(blank=True, default='default.jpg')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True)
     datetime_added = models.DateTimeField(auto_now_add=True, blank=True)
+    stars = models.FloatField(default=0.0, validators=[MinValueValidator(0.0), MaxValueValidator(5.0)])
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
@@ -55,6 +57,9 @@ class Comment(models.Model):
 
 
 class Rating(models.Model):
-    rate = models.FloatField(default=0.0)
+    rate = models.FloatField(default=0.0, validators=[MinValueValidator(0.0), MaxValueValidator(5.0)])
     article_id = models.ForeignKey(Article, on_delete=models.CASCADE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def save(self, *args, **kwargs):
+        super.save(Rating,*args, **kwargs)

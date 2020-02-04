@@ -1,0 +1,9 @@
+    .nav-link:hover{
+        background: dimgray;
+    }
+
+    .nav-text{
+        font-family: "DejaVu Sans",sans-serif;
+        font-size: 22px;
+        font-weight: bold;
+    }

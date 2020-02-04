@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <Blog/>
+    <blog/>
+    <router-view/>
   </div>
 </template>
 
@@ -19,9 +20,15 @@ export default {
 </script>
 
 <style>
+  @import './assets/navbar_style.css';
+
   #app{
     background: wheat;
     min-height: 100vh;
   }
+  .star-checked {
+  color: orange;
+  }
+
 </style>
 
