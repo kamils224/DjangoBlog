@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Axios from "axios";
-import chunk from "chunk"
+import AuthModule from "./auth"
+import chunk from "chunk";
 
 Vue.use(Vuex);
 Vue.config.productionTip = false;
@@ -11,6 +12,7 @@ const articlesUrl = `${baseUrl}/api/articles`;
 
 export default new Vuex.Store({
     strict: process.env.NODE_ENV !== 'production',
+    modules: {auth: AuthModule},
     state: {
         articles: [],
     },
@@ -22,7 +24,7 @@ export default new Vuex.Store({
             }else{
                 Vue.set(currentState.articles, index, article);
             }
-        }
+        },
     },
     actions:{
         async getArticlesAction(context){
@@ -45,6 +47,6 @@ export default new Vuex.Store({
         },
     },
     getters:{
-        chunkedArticles: state => {return chunk(state.articles,3);}
+        chunkedArticles: state => {return chunk(state.articles,3);},
     }
 })

@@ -26,7 +26,7 @@ class Category(models.Model):
 
 class Article(models.Model):
     article_heading = models.CharField(max_length=20)
-    article_body = models.TextField(max_length=10000)
+    article_body = models.TextField(max_length=30000)
     image = models.ImageField(blank=True, default='default.jpg')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True)
