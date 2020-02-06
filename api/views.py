@@ -1,6 +1,6 @@
 import django_filters
 from django.contrib.auth.models import User
-from rest_framework import viewsets, serializers
+from rest_framework import viewsets, filters
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,7 +10,7 @@ from api.serializers import UserSerializer, CommentSerializer, CategorySerialize
     ArticleImageSerializer
 from .models import Article, Comment, Category, Rating, ArticleImage
 from .serializers import ArticleSerializer
-from .permissions import IsOwnerOrReadOnly, IsAdminUser, IsAdminUserOrReadOnly
+from .permissions import IsOwnerOrReadOnly, IsAdminUser, IsAdminUserOrReadOnly, IsPostOrIsAuthenticated
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -18,13 +18,13 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsPostOrIsAuthenticated]
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUserOrReadOnly]
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -32,7 +32,8 @@ class ArticleViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsOwnerOrReadOnly | IsAdminUser]
-    filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['article_heading']
 
     def destroy(self, request, *args, **kwargs):
         article = self.get_object()
@@ -41,10 +42,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
 
 
 class ArticleImageViewSet(viewsets.ModelViewSet):
-    queryset = ArticleImage
+    queryset = ArticleImage.objects.all()
     serializer_class = ArticleImageSerializer
     permission_classes = [IsAdminUserOrReadOnly]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filter_fields = ['id','article_id']
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -58,5 +60,5 @@ class CommentViewSet(viewsets.ModelViewSet):
 class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]

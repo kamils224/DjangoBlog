@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User
-from rest_framework import serializers
+from rest_framework import serializers, status
+from rest_framework.response import Response
+
 from .models import Article, Category, ArticleImage, Comment, Rating
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password')
+        fields = ('id', 'username', 'first_name','last_name','email', 'password')
         extra_kwargs = {'password': {'required': True, 'write_only': True}}
 
     def create(self, validated_data):

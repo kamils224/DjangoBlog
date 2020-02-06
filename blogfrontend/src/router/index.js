@@ -4,14 +4,22 @@ import ArticleDisplay from "../components/ArticleDisplay";
 import ArticleList from "../components/ArticleList";
 import Login from "../components/Login"
 import Logout from "../components/Logout";
+import Register from "../components/Register";
+import store from '../store';
 Vue.use(VueRouter);
-export default new VueRouter({
+
+ const router = new VueRouter({
     mode: "history",
     routes: [{
             name: "home",
             path: "/",
             component: ArticleList,
             alias: "/home"
+        },
+        {
+            name: "search",
+            path: "/search/:id",
+            component: ArticleList,
         },
         {
             name: "display",
@@ -21,17 +29,56 @@ export default new VueRouter({
         {
             name: "login",
             path: "/login",
-            component: Login
+            component: Login,
+            meta:{
+                requiresVisitor: true,
+            }
         },
         {
             name: "logout",
             path: "/logout",
             component: Logout
         },
-
+        {
+            name: "register",
+            path: "/register",
+            component: Register,
+            meta:{
+                requiresVisitor: true,
+            }
+        },
         {
             path: "*",
             redirect: "/"
         }
-    ]
-})
+    ],
+});
+
+ router.beforeEach((to, from, next)=>{
+    if(to.matched.some(record => record.meta.requiresAuth)){
+        if(!store.getters.loggedIn){
+            next({
+                path: 'login',
+                query: {redirect: to.fullPath}
+            })
+        }else{
+            next()
+        }
+    }
+    if(to.matched.some(record => record.meta.requiresVisitor)){
+
+        if(store.getters.loggedIn){
+            next({
+                path: 'home',
+                query: {redirect: to.fullPath}
+            })
+        }else{
+            next()
+        }
+    }else{
+        next();
+     }
+});
+
+
+ export default router

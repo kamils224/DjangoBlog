@@ -1,6 +1,6 @@
 import Axios from "axios";
 const loginUrl = 'http://127.0.0.1:8000/api-token-auth/';
-
+const registerUrl ='http://127.0.0.1:8000/api/users';
 export default {
     state: {
         jwt: localStorage.getItem('access_token') || null,
@@ -37,7 +37,6 @@ export default {
             try {
                 let response = await Axios.post(loginUrl, credentials);
                 if (response.statusText === "OK"){
-
                     context.commit("setAuthenticated", response.data.token);
                 return true;
             }
@@ -45,7 +44,17 @@ export default {
             }catch{
                 return false;
             }
-
+        },
+        async createUser(context, credentials){
+            try {
+                let response = await Axios.post(registerUrl, credentials);
+                if (response !== undefined){
+                    return true;
+                }
+            }catch (e) {
+                return false;
+            }
+            return false;
         }
     },
 

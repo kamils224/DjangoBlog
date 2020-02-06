@@ -7,46 +7,104 @@ import chunk from "chunk";
 Vue.use(Vuex);
 Vue.config.productionTip = false;
 
-const baseUrl ='http://127.0.0.1:8000';
+const baseUrl = 'http://127.0.0.1:8000';
 const articlesUrl = `${baseUrl}/api/articles`;
+const categoriesUrl = `${baseUrl}/api/categories`;
 
 export default new Vuex.Store({
     strict: process.env.NODE_ENV !== 'production',
     modules: {auth: AuthModule},
     state: {
         articles: [],
+        categories: [],
+        nextPage: null,
+        previousPage: null,
+        selectedArticle: null,
+        search: "Boar",
     },
-    mutations:{
-        saveArticle(currentState, article){
-            let index = currentState.articles.findIndex(a=>a.id === article.id);
-            if(index === -1){
+    mutations: {
+        saveArticle(currentState, article) {
+            let index = currentState.articles.findIndex(a => a.id === article.id);
+            if (index === -1) {
                 currentState.articles.push(article);
-            }else{
+            } else {
                 Vue.set(currentState.articles, index, article);
             }
         },
-    },
-    actions:{
-        async getArticlesAction(context){
-            let data = (await Axios.get(articlesUrl)).data;
-            data.results.forEach(a=>context.commit("saveArticle",a));
+        saveCategory(currentState, category) {
+            let index = currentState.categories.findIndex(c => c.id === category.id);
+            if (index === -1) {
+                currentState.categories.push(category);
+            } else {
+                Vue.set(currentState.categories, index, category);
+            }
         },
-        async printArticlesAction(context){
-            let result = await Axios.get(articlesUrl).data;
-            context.commit("print", result);
+        savePages(currentState, pageUrls) {
+            if (pageUrls.next != null) {
+                this.state.nextPage = pageUrls.next;
+            }
+            if (pageUrls.previous != null) {
+                this.state.previousPage = pageUrls.previous;
+            }
+        },
+        clearArticles(currentState) {
+            if (currentState.articles.length > 0) {
+                currentState.articles = [];
+            }
+        },
+        selectArticle(currentState, article) {
+            console.log(article);
+            this.selectArticle = article;
+        },
+        searchValue(value) {
+            this.state.search = value;
+        }
+    },
+    actions: {
+        async getArticlesAction(context, url = null,) {
+            console.log(url);
+            if (url == null) {
+                url = articlesUrl;
+            }
+
+            let data = (await Axios.get(url)).data;
+            context.commit("clearArticles");
+            data.results.forEach(a => context.commit("saveArticle", a));
+            context.commit("savePages", {previous: data.previous, next: data.next});
 
         },
-        async saveArticlesAction(context, article){
-            let index = context.state.articles.findIndex(a=> a.id === article.id);
-            if(index){
+        async getSpecificArticleAction(context, id) {
+            console.log('data ' + id);
+            let data = (await Axios.get(articlesUrl + '/' + id)).data;
+            context.commit('selectArticle', data);
+        },
+        async getCategoriesAction(context) {
+            let data = (await Axios.get(categoriesUrl)).data;
+            data.results.forEach(c => context.commit("saveCategory", c));
+        },
+        async saveArticlesAction(context, article) {
+            let index = context.state.articles.findIndex(a => a.id === article.id);
+            if (index) {
                 await Axios.post(articlesUrl, article);
-            }else{
+            } else {
                 await Axios.put(articlesUrl, article);
             }
             context.commit("saveArticle", article);
         },
+
     },
-    getters:{
-        chunkedArticles: state => {return chunk(state.articles,3);},
+    getters: {
+        chunkedArticles: state => {
+            return chunk(state.articles, 3);
+        },
+        categories: state => {
+            return state.categories;
+        },
+        nextPage: state => {
+            return state.nextPage;
+        },
+        previousPage: state => {
+            return state.previousPage;
+        }
     }
 })
