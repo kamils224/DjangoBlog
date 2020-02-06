@@ -68,10 +68,11 @@ export default new Vuex.Store({
             }
 
             let data = (await Axios.get(url)).data;
-            context.commit("clearArticles");
-            data.results.forEach(a => context.commit("saveArticle", a));
-            context.commit("savePages", {previous: data.previous, next: data.next});
-
+            if (data.results !== undefined) {
+                context.commit("clearArticles");
+                data.results.forEach(a => context.commit("saveArticle", a));
+                context.commit("savePages", {previous: data.previous, next: data.next});
+            }
         },
         async getSpecificArticleAction(context, id) {
             console.log('data ' + id);
