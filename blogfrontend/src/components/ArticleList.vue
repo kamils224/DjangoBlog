@@ -27,9 +27,9 @@
         <div class="justify-content-center pagination">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
-                    <li v-on:click="getArticles(previousPage)" class="page-item"><a class="page-link" href="#">Previous
+                    <li v-on:click="getArticles('todo')" class="page-item"><a class="page-link" href="#">Previous
                         Page</a></li>
-                    <li v-on:click="getArticles(nextPage)" class="page-item"><a class="page-link"
+                    <li v-on:click="getArticles('todo')" class="page-item"><a class="page-link"
                                                                                 href="#">Next Page</a>
                     </li>
                 </ul>

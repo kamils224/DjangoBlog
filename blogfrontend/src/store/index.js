@@ -8,7 +8,7 @@ Vue.use(Vuex);
 Vue.config.productionTip = false;
 
 const baseUrl = 'http://127.0.0.1:8000';
-const articlesUrl = `${baseUrl}/api/articles`;
+const articlesUrl = `${baseUrl}/api/articles?search=`;
 const categoriesUrl = `${baseUrl}/api/categories`;
 
 export default new Vuex.Store({
@@ -19,8 +19,6 @@ export default new Vuex.Store({
         categories: [],
         nextPage: null,
         previousPage: null,
-        selectedArticle: null,
-        search: "Boar",
     },
     mutations: {
         saveArticle(currentState, article) {
@@ -61,13 +59,10 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        async getArticlesAction(context, url = null,) {
-            console.log(url);
-            if (url == null) {
-                url = articlesUrl;
-            }
+        async getArticlesAction(context, search='') {
 
-            let data = (await Axios.get(url)).data;
+            console.log(articlesUrl+search);
+            let data = (await Axios.get(articlesUrl+search)).data;
             if (data.results !== undefined) {
                 context.commit("clearArticles");
                 data.results.forEach(a => context.commit("saveArticle", a));

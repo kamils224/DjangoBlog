@@ -41,12 +41,19 @@
                 images: []
             }
         },
-        methods: {},
-        async created() {
+        methods: {
+            async getArticle() {
+                this.article = (await Axios.get(articleUrl + this.$route.params.id)).data;
 
-            this.article = (await Axios.get(articleUrl + this.$route.params.id)).data;
-            let images = (await Axios.get(imagesUrl + this.$route.params.id)).data.results;
-            images.forEach(i => this.images.push(i));
+            },
+            async getArticleImages() {
+                let images = (await Axios.get(imagesUrl + this.$route.params.id)).data.results;
+                images.forEach(i => this.images.push(i));
+            }
+        },
+        created() {
+            this.getArticle();
+            this.getArticleImages();
         },
     }
 </script>
