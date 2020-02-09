@@ -66,7 +66,6 @@
             onPageChange(current) {
 
                 let search = this.searchQuery;
-                console.log(current);
                 this.getArticles({search, page: current});
             },
             categoryName(id){

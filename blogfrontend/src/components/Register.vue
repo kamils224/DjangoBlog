@@ -87,5 +87,7 @@
 </script>
 
 <style scoped>
-
+    label {
+        font-weight: bold;
+    }
 </style>

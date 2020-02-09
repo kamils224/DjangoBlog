@@ -18,7 +18,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     authentication_classes = [TokenAuthentication]
-    permission_classes = [IsPostOrIsAuthenticated]
+    permission_classes = [IsPostOrIsAuthenticated | IsAdminUserOrReadOnly]
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

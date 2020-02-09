@@ -17,8 +17,6 @@ export default new Vuex.Store({
     state: {
         articles: [],
         categories: [],
-        nextPage: null,
-        previousPage: null,
         pageLimit: 6,
         totalArticles: 0,
         searchQuery: ''
@@ -71,14 +69,8 @@ export default new Vuex.Store({
 
             let nextPage = parseInt(query.page)-1;
             let limit = parseInt(this.state.pageLimit);
-
             let offset = nextPage * limit;
-
-            console.log('limit: ' + this.state.pageLimit);
-            console.log('next: ' + (nextPage));
-
             let queryString = `?limit=${this.state.pageLimit}&offset=${offset}&search=${query.search}`;
-            console.log(articlesUrl + queryString);
             let data = (await Axios.get(articlesUrl + queryString)).data;
             if (data.results !== undefined) {
                 context.commit("clearArticles");

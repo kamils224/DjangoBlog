@@ -1,5 +1,11 @@
-    .category {
-        color: orange;
-        font-weight: normal;
-        font-size: 20px;
-    }
+.category {
+    color: orange;
+    font-weight: normal;
+    font-size: 18px;
+}
+
+.author {
+    color: gray;
+    font-size: 20px;
+    font-weight: normal;
+}
