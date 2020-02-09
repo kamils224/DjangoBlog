@@ -3,7 +3,7 @@
         <div class="text-center">
             <img class="img-fluid" src="@/assets/CB_logo.png"/>
         </div>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="justify-content-center navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="text-center">
                 <ul class="navbar-nav ">
                     <li class="nav-item">
@@ -33,6 +33,7 @@
             </div>
         </nav>
         <router-view/>
+
     </div>
 </template>
 
@@ -46,7 +47,6 @@
         components: {},
 
         created() {
-            console.log(this.$route.query.search);
             this.$store.dispatch("getArticlesAction");
             this.$store.dispatch("getCategoriesAction");
         },
@@ -61,8 +61,6 @@
                 getArticles: "getArticlesAction",
             }),
         },
-        mounted() {
-        }
     }
 </script>
 

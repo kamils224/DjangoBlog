@@ -8,7 +8,7 @@ Vue.use(Vuex);
 Vue.config.productionTip = false;
 
 const baseUrl = 'http://127.0.0.1:8000';
-const articlesUrl = `${baseUrl}/api/articles?search=`;
+const articlesUrl = `${baseUrl}/api/articles`;
 const categoriesUrl = `${baseUrl}/api/categories`;
 
 export default new Vuex.Store({
@@ -19,6 +19,9 @@ export default new Vuex.Store({
         categories: [],
         nextPage: null,
         previousPage: null,
+        pageLimit: 6,
+        totalArticles: 0,
+        searchQuery: ''
     },
     mutations: {
         saveArticle(currentState, article) {
@@ -37,42 +40,42 @@ export default new Vuex.Store({
                 Vue.set(currentState.categories, index, category);
             }
         },
-        savePages(currentState, pageUrls) {
-            if (pageUrls.next != null) {
-                this.state.nextPage = pageUrls.next;
-            }
-            if (pageUrls.previous != null) {
-                this.state.previousPage = pageUrls.previous;
-            }
-        },
         clearArticles(currentState) {
             if (currentState.articles.length > 0) {
                 currentState.articles = [];
             }
         },
         selectArticle(currentState, article) {
-            console.log(article);
             this.selectArticle = article;
         },
-        searchValue(value) {
-            this.state.search = value;
+        setTotalArticles(currentState, totalArticles) {
+            currentState.totalArticles = totalArticles;
         }
     },
     actions: {
-        async getArticlesAction(context, search='') {
+        async getArticlesAction(context, query = {search: '', page: 1}) {
 
-            console.log(articlesUrl+search);
-            let data = (await Axios.get(articlesUrl+search)).data;
+            if (!Number.isInteger(query.page)) {
+                return;
+            }
+
+            let nextPage = parseInt(query.page)-1;
+            let limit = parseInt(this.state.pageLimit);
+
+            let offset = nextPage * limit;
+
+            console.log('limit: ' + this.state.pageLimit);
+            console.log('next: ' + (nextPage));
+
+            let queryString = `?limit=${this.state.pageLimit}&offset=${offset}&search=${query.search}`;
+            console.log(articlesUrl + queryString);
+            let data = (await Axios.get(articlesUrl + queryString)).data;
             if (data.results !== undefined) {
                 context.commit("clearArticles");
                 data.results.forEach(a => context.commit("saveArticle", a));
-                context.commit("savePages", {previous: data.previous, next: data.next});
+                context.commit("setTotalArticles", data.count)
+
             }
-        },
-        async getSpecificArticleAction(context, id) {
-            console.log('data ' + id);
-            let data = (await Axios.get(articlesUrl + '/' + id)).data;
-            context.commit('selectArticle', data);
         },
         async getCategoriesAction(context) {
             let data = (await Axios.get(categoriesUrl)).data;
@@ -101,6 +104,9 @@ export default new Vuex.Store({
         },
         previousPage: state => {
             return state.previousPage;
-        }
+        },
+        pageLimit: state => {
+            return state.pageLimit;
+        },
     }
 })

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div v-for="articles in chunkedArticles" v-bind:key="articles.id" class="row justify-content-between mt-2">
+        <div v-for="articles in chunkedArticles" v-bind:key="articles.id" class="row justify-content-center  mt-2">
             <div v-for="article in articles" v-bind:key="article.id" class="col-xl-4 mt-2 mb-2">
                 <div class="article">
                     <router-link class="article-link" v-bind:to="{name: 'display',
@@ -24,18 +24,11 @@
                 </div>
             </div>
         </div>
-        <div class="justify-content-center pagination">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li v-on:click="getArticles('todo')" class="page-item"><a class="page-link" href="#">Previous
-                        Page</a></li>
-                    <li v-on:click="getArticles('todo')" class="page-item"><a class="page-link"
-                                                                                href="#">Next Page</a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="row justify-content-center">
+            <a-pagination @change="onPageChange" v-model="current" :pageSize="pageLimit" :total="totalArticles" />
         </div>
     </div>
+
 </template>
 
 <script>
@@ -48,16 +41,32 @@
 
 
     export default {
+        data:function(){
+            return {
+                current:1,
+            }
+        },
         computed: {
             ...mapGetters(["chunkedArticles"]),
-            ...mapGetters(["nextPage"]),
-            ...mapGetters(["previousPage"]),
+            ...mapGetters(["pageLimit"]),
             ...mapState(["categories"]),
+            totalArticles(){
+                return this.$store.state.totalArticles;
+            },
+            searchQuery(){
+                return this.$store.state.searchQuery;
+            }
         },
         methods: {
             ...mapActions({
                 getArticles: "getArticlesAction",
             }),
+            onPageChange(current){
+
+                let search = this.searchQuery;
+                console.log(current);
+                this.getArticles({search,page:current});
+            }
         },
     }
 </script>

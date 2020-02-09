@@ -12,9 +12,9 @@ Vue.use(VueRouter);
     mode: "history",
     routes: [{
             name: "home",
-            path: "/",
+            path: "/:page(\\d?)",
             component: ArticleList,
-            alias: "/home"
+            alias: "/home/:page(\\d?)"
         },
         {
             name: "search",
