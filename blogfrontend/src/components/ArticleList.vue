@@ -1,11 +1,14 @@
 <template>
     <div>
         <div v-for="articles in chunkedArticles" v-bind:key="articles.id" class="row justify-content-center  mt-2">
-            <div v-for="article in articles" v-bind:key="article.id" class="col-xl-4 mt-2 mb-2">
+            <div v-for="article in articles" v-bind:key="article.id" class="col-xl-4 mt-1 mb-1">
                 <div class="article">
                     <router-link class="article-link" v-bind:to="{name: 'display',
                                         params: { op: 'display', id: article.id}}">
                         <div class="article-block">
+                            <div class="row justify-content-center">
+                                <h2 class="category">{{categoryName(article.category)}}</h2>
+                            </div>
                             <div class="row justify-content-center">
                                 <h2>{{article.article_heading}}</h2>
                             </div>
@@ -25,7 +28,7 @@
             </div>
         </div>
         <div class="row justify-content-center">
-            <a-pagination @change="onPageChange" v-model="current" :pageSize="pageLimit" :total="totalArticles" />
+            <a-pagination @change="onPageChange" v-model="current" :pageSize="pageLimit" :total="totalArticles"/>
         </div>
     </div>
 
@@ -36,36 +39,38 @@
     import {
         mapGetters,
         mapActions,
-        mapState,
     } from "vuex"
 
 
     export default {
-        data:function(){
+        data: function () {
             return {
-                current:1,
+                current: 1,
             }
         },
         computed: {
             ...mapGetters(["chunkedArticles"]),
             ...mapGetters(["pageLimit"]),
-            ...mapState(["categories"]),
-            totalArticles(){
+            ...mapGetters(["categories"]),
+            totalArticles() {
                 return this.$store.state.totalArticles;
             },
-            searchQuery(){
+            searchQuery() {
                 return this.$store.state.searchQuery;
-            }
+            },
         },
         methods: {
             ...mapActions({
                 getArticles: "getArticlesAction",
             }),
-            onPageChange(current){
+            onPageChange(current) {
 
                 let search = this.searchQuery;
                 console.log(current);
-                this.getArticles({search,page:current});
+                this.getArticles({search, page: current});
+            },
+            categoryName(id){
+                return this.categories.find(i=>i.id === id).category_name;
             }
         },
     }
@@ -80,7 +85,7 @@
     }
 
     .article-image {
-        width: 250px;
+        width: auto;
         height: 180px;
     }
 

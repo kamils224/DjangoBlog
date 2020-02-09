@@ -1,5 +1,5 @@
 <template>
-        <div class="container">
+        <div class="container mt-3">
         <div class="row justify-content-center">
             <h4 v-if="showFailureMessage" class="bg-danger text-white text-center p-2 my-2">
                 Authentication failed. Try again.

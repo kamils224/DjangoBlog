@@ -1,7 +1,8 @@
 <template>
-    <div class="article-content">
+    <div class="article-content mt-3">
         <div class="row m-5">
             <div class="col-lg-8">
+                <h2 class="category">{{categoryName}}</h2>
                 <h2>{{article.article_heading}}</h2>
                 <span v-for="i in 5" v-bind:key="i">
                     <span v-if="article.stars >= i-0.25" class="fa fa-star fa-2x star-checked"></span>
@@ -38,7 +39,18 @@
         data: function () {
             return {
                 article: {},
-                images: []
+                images: [],
+            }
+        },
+        computed: {
+            categoryName() {
+                let result = this.$store.state.categories.find(i => i.id === this.article.category);
+                console.log(result);
+                if (result) {
+                    return result.category_name;
+                } else {
+                    return '';
+                }
             }
         },
         methods: {
@@ -63,4 +75,5 @@
         background: white;
         border: orange solid 5px;
     }
+
 </style>

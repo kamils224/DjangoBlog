@@ -32,6 +32,13 @@ export default new Vuex.Store({
                 Vue.set(currentState.articles, index, article);
             }
         },
+        sortArticles(currentState){
+            currentState.articles.sort((a,b)=>{
+                if(a.stars>b.stars) return -1;
+                if(a.stars<b.stars) return 1;
+                else return 0;
+            });
+        },
         saveCategory(currentState, category) {
             let index = currentState.categories.findIndex(c => c.id === category.id);
             if (index === -1) {
@@ -50,6 +57,9 @@ export default new Vuex.Store({
         },
         setTotalArticles(currentState, totalArticles) {
             currentState.totalArticles = totalArticles;
+        },
+        getCategoryName(currentState, id){
+            return currentState.categories.find(i=>i.id === id);
         }
     },
     actions: {
@@ -73,6 +83,7 @@ export default new Vuex.Store({
             if (data.results !== undefined) {
                 context.commit("clearArticles");
                 data.results.forEach(a => context.commit("saveArticle", a));
+                context.commit('sortArticles');
                 context.commit("setTotalArticles", data.count)
 
             }

@@ -39,7 +39,7 @@
 
 <script>
     import {
-        mapGetters,mapActions,
+        mapGetters, mapActions,
     } from "vuex"
 
     export default {
@@ -47,8 +47,9 @@
         components: {},
 
         created() {
-            this.$store.dispatch("getArticlesAction");
             this.$store.dispatch("getCategoriesAction");
+            this.$store.dispatch("getArticlesAction");
+
         },
         computed: {
             loggedIn() {
@@ -66,6 +67,7 @@
 
 <style>
     @import './assets/navbar_style.css';
+    @import './assets/style.css';
 
     #app {
         background: wheat;
