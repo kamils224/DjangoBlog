@@ -30,10 +30,10 @@ export default new Vuex.Store({
                 Vue.set(currentState.articles, index, article);
             }
         },
-        sortArticles(currentState){
-            currentState.articles.sort((a,b)=>{
-                if(a.stars>b.stars) return -1;
-                if(a.stars<b.stars) return 1;
+        sortArticles(currentState) {
+            currentState.articles.sort((a, b) => {
+                if (a.stars > b.stars) return -1;
+                if (a.stars < b.stars) return 1;
                 else return 0;
             });
         },
@@ -56,18 +56,24 @@ export default new Vuex.Store({
         setTotalArticles(currentState, totalArticles) {
             currentState.totalArticles = totalArticles;
         },
-        getCategoryName(currentState, id){
-            return currentState.categories.find(i=>i.id === id);
+        getCategoryName(currentState, id) {
+            return currentState.categories.find(i => i.id === id);
+        },
+        setSearchQuery(currentState, value){
+            currentState.searchQuery=value;
         }
     },
     actions: {
         async getArticlesAction(context, query = {search: '', page: 1}) {
 
+            console.log('Search: '+ query.search);
+            console.log('page: '+ query.page);
+
             if (!Number.isInteger(query.page)) {
                 return;
             }
 
-            let nextPage = parseInt(query.page)-1;
+            let nextPage = parseInt(query.page) - 1;
             let limit = parseInt(this.state.pageLimit);
             let offset = nextPage * limit;
             let queryString = `?limit=${this.state.pageLimit}&offset=${offset}&search=${query.search}`;
@@ -110,6 +116,9 @@ export default new Vuex.Store({
         },
         pageLimit: state => {
             return state.pageLimit;
+        },
+        searchQuery: state => {
+            return state.searchQuery;
         },
     }
 })

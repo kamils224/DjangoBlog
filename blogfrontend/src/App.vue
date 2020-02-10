@@ -7,9 +7,9 @@
             <div class="text-center">
                 <ul class="navbar-nav ">
                     <li class="nav-item">
-                        <router-link to="/home" class="nav-link nav-text">
+                        <a @click="mainPage()" href="#main_page" class="nav-link nav-text">
                             Main Page <span class="sr-only">(current)</span>
-                        </router-link>
+                        </a>
                     </li>
                     <li v-if="!loggedIn" class="nav-item">
                         <router-link to="/register" class="nav-link nav-text">
@@ -29,6 +29,15 @@
                     <li class="nav-item navbar-right">
                         <a href="http://localhost:8000/admin/" target="_blank" class="nav-link nav-text">Admin site</a>
                     </li>
+                    <li>
+                        <div class=" form-inline mt-2">
+                            <input v-model="currentSearch" class="form-control ml-2" style="max-width: 200px"
+                                   type="search" placeholder="Search" aria-label="Search">
+                            <button @click="searchArticles()" class="btn btn-outline-success ml-2">
+                                Search
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -39,13 +48,18 @@
 
 <script>
     import {
-        mapGetters, mapActions,
+        mapGetters,
     } from "vuex"
 
     export default {
         name: 'app',
         components: {},
-
+        data: function () {
+            return {
+                currentSearch: '',
+                searchMode: false
+            }
+        },
         created() {
             this.$store.dispatch("getCategoriesAction");
             this.$store.dispatch("getArticlesAction");
@@ -58,9 +72,18 @@
             ...mapGetters(["categories"]),
         },
         methods: {
-            ...mapActions({
-                getArticles: "getArticlesAction",
-            }),
+            searchArticles() {
+                let query = this.currentSearch;
+                this.$store.commit('setSearchQuery', query);
+                this.$store.dispatch('getArticlesAction', {search: query, page: 1});
+                this.$router.push('/home');
+            },
+            mainPage() {
+                let query = '';
+                this.$store.commit('setSearchQuery', query);
+                this.$store.dispatch('getArticlesAction', {search: query, page: 1});
+                this.$router.push('/home');
+            }
         },
     }
 </script>
