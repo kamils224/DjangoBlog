@@ -20,10 +20,15 @@
         <div class="row m-5 justify-content-center">
             {{article.article_body}}
         </div>
-        <div class="row m-5 justify-content-center">
-            <div v-for="img in images" v-bind:key="img.id" class="col-lg">
-                <img v-bind:src=img.image width="300" height="200"/>
-            </div>
+        <div class="">
+            <a-carousel arrows dotsClass="slick-dots slick-thumb">
+                <a slot="customPaging" slot-scope="props">
+                    <img :src="getImgUrl(props.i)"/>
+                </a>
+                <div v-for="img in images" v-bind:key="img.id" alt="">
+                    <img :src="img.image" height="500" width="auto"/>
+                </div>
+            </a-carousel>
         </div>
     </div>
 </template>
@@ -64,6 +69,9 @@
                 let images = (await Axios.get(imagesUrl + this.$route.params.id)).data.results;
                 images.forEach(i => this.images.push(i));
             },
+            getImgUrl(i) {
+                return this.images[i].image;
+            },
         },
         created() {
             this.getArticle();
@@ -76,6 +84,38 @@
     .article-content {
         background: white;
         border: orange solid 5px;
+        padding-bottom: 5%;
+    }
+
+    /* For demo */
+    .ant-carousel >>> .slick-dots {
+        height: auto;
+    }
+
+    .ant-carousel >>> .slick-slide img {
+        border: 5px solid #fff;
+        display: block;
+        margin: auto;
+        max-width: 80%;
+    }
+
+    .ant-carousel >>> .slick-thumb {
+        bottom: -45px;
+    }
+
+    .ant-carousel >>> .slick-thumb li {
+        width: 60px;
+        height: 45px;
+    }
+
+    .ant-carousel >>> .slick-thumb li img {
+        width: 100%;
+        height: 100%;
+        filter: grayscale(100%);
+    }
+
+    .ant-carousel >>> .slick-thumb li.slick-active img {
+        filter: grayscale(0%);
     }
 
 </style>

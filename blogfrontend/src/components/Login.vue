@@ -36,8 +36,8 @@
         components: {ValidationError},
         data: function () {
             return {
-                username: "kamil",
-                password: "kamil",
+                username: "",
+                password: "",
                 showFailureMessage: false,
                 showRegistrationMessage: false,
             }

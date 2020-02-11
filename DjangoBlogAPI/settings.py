@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'api',
     'corsheaders',
     'sorl.thumbnail',
+    'tinymce',
 ]
 
 REST_FRAMEWORK = {

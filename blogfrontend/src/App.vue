@@ -7,9 +7,18 @@
             <div class="text-center">
                 <ul class="navbar-nav ">
                     <li class="nav-item">
-                        <a @click="mainPage()" href="#main_page" class="nav-link nav-text">
+                        <a @click="mainPage()" href="#" class="nav-link nav-text" >
                             Main Page <span class="sr-only">(current)</span>
                         </a>
+                    </li>
+                    <li>
+                        <div class=" form-inline mt-2">
+                            <input v-model="currentSearch" class="form-control ml-2" style="max-width: 200px"
+                                   type="search" placeholder="Search" aria-label="Search">
+                            <button @click="searchArticles()" class="btn btn-outline-success ml-2 mr-2">
+                                Search
+                            </button>
+                        </div>
                     </li>
                     <li v-if="!loggedIn" class="nav-item">
                         <router-link to="/register" class="nav-link nav-text">
@@ -26,17 +35,9 @@
                             Logout
                         </router-link>
                     </li>
-                    <li class="nav-item navbar-right">
+
+                    <li v-if="loggedIn" class="nav-item navbar-right">
                         <a href="http://localhost:8000/admin/" target="_blank" class="nav-link nav-text">Admin site</a>
-                    </li>
-                    <li>
-                        <div class=" form-inline mt-2">
-                            <input v-model="currentSearch" class="form-control ml-2" style="max-width: 200px"
-                                   type="search" placeholder="Search" aria-label="Search">
-                            <button @click="searchArticles()" class="btn btn-outline-success ml-2">
-                                Search
-                            </button>
-                        </div>
                     </li>
                 </ul>
             </div>
@@ -82,7 +83,7 @@
                 let query = '';
                 this.$store.commit('setSearchQuery', query);
                 this.$store.dispatch('getArticlesAction', {search: query, page: 1});
-                this.$router.push('/home');
+                this.$router.push('/home').catch(()=>{});
             }
         },
     }

@@ -66,9 +66,6 @@ export default new Vuex.Store({
     actions: {
         async getArticlesAction(context, query = {search: '', page: 1}) {
 
-            console.log('Search: '+ query.search);
-            console.log('page: '+ query.page);
-
             if (!Number.isInteger(query.page)) {
                 return;
             }
