@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from django.core.validators import MaxValueValidator, MinValueValidator
 from PIL import Image
+from tinymce.models import HTMLField
 
 
 @receiver(post_save, sender=User)
@@ -26,7 +27,7 @@ class Category(models.Model):
 
 class Article(models.Model):
     article_heading = models.CharField(max_length=20)
-    article_body = models.TextField(max_length=30000)
+    article_body = HTMLField()
     image = models.ImageField(blank=True, default='default.jpg')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True)

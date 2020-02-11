@@ -17,7 +17,7 @@
         <div class="row m-5 justify-content-center">
             <h2>Description</h2>
         </div>
-        <div class="row m-5 justify-content-center">
+        <div v-html="article.article_body" class="row m-5 justify-content-center">
             {{article.article_body}}
         </div>
         <div class="">
