@@ -69,7 +69,7 @@ class RatingViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         response = super(RatingViewSet, self).create(request, *args, **kwargs)
-        self.count_stars(request, create=True)
+        self.count_stars(request)
         return response
 
     def update(self, request, *args, **kwargs):
@@ -77,7 +77,7 @@ class RatingViewSet(viewsets.ModelViewSet):
         self.count_stars(request)
         return response
 
-    def count_stars(self, request, create=False):
+    def count_stars(self, request):
         article = Article.objects.get(id=request.data['article_id'])
         ratings = Rating.objects.filter(article_id=article.id)
         average_ratio = 0.0
