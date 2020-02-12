@@ -16,7 +16,6 @@
                                 <img v-bind:src=article.image class="img-responsive article-image"/>
                             </div>
                             <div class="row justify-content-center">
-                                <h2 class="category m-2">Difficulty: </h2>
                                 <span v-for="i in 5" v-bind:key="i">
                                     <span v-if="article.stars >= i-0.25" class="fa fa-star fa-2x star-checked"></span>
                                     <span v-else class="fa fa-star fa-2x"></span>
@@ -89,7 +88,7 @@
     }
 
     .article-block:hover {
-        background-color: yellowgreen;
+        background-color: lightgray;
     }
 
     .article-link {

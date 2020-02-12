@@ -49,6 +49,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ('id', 'text', 'article_id', 'owner')
+        read_only_fields = ['owner']
 
 
 class RatingSerializer(serializers.ModelSerializer):
@@ -60,3 +61,4 @@ class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
         fields = ('id', 'rate', 'article_id', 'owner')
+        read_only_fields = ['owner']

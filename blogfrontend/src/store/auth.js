@@ -6,12 +6,8 @@ export default {
         jwt: localStorage.getItem('access_token') || null,
     },
     getters:{
-        authenticatedAxios(state){
-            return Axios.create({
-                headers: {
-                    "Authorization": `Token ${state.jwt}`
-                }
-            })
+        getToken(state){
+            return {headers: {Authorization: `Token ${state.jwt}`}};
         },
         loggedIn(state){
             return state.jwt!=null;

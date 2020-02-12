@@ -7,7 +7,7 @@
             <div class="text-center">
                 <ul class="navbar-nav ">
                     <li class="nav-item">
-                        <a @click="mainPage()" href="#" class="nav-link nav-text" >
+                        <a @click="mainPage()" href="#" class="nav-link nav-text">
                             Main Page <span class="sr-only">(current)</span>
                         </a>
                     </li>
@@ -73,18 +73,22 @@
             ...mapGetters(["categories"]),
         },
         methods: {
-            searchArticles() {
-                let query = this.currentSearch;
+            routeToHome(query) {
                 this.$store.commit('setSearchQuery', query);
                 this.$store.dispatch('getArticlesAction', {search: query, page: 1});
-                this.$router.push('/home');
+                this.$router.push('/home').catch(() => {
+                });
+            },
+            searchArticles() {
+                let query = this.currentSearch;
+                this.routeToHome(query);
             },
             mainPage() {
                 let query = '';
-                this.$store.commit('setSearchQuery', query);
-                this.$store.dispatch('getArticlesAction', {search: query, page: 1});
-                this.$router.push('/home').catch(()=>{});
-            }
+                this.routeToHome(query);
+
+            },
+
         },
     }
 </script>

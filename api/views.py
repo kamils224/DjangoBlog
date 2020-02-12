@@ -1,5 +1,7 @@
 import django_filters
 from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, filters
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -46,18 +48,23 @@ class ArticleImageViewSet(viewsets.ModelViewSet):
     serializer_class = ArticleImageSerializer
     permission_classes = [IsAdminUserOrReadOnly]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
-    filter_fields = ['id','article_id']
+    filter_fields = ['id', 'article_id']
 
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticated | IsOwnerOrReadOnly]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsOwnerOrReadOnly]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
 
 
 class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
+    authentication_classes = [TokenAuthentication]
     permission_classes = [IsOwnerOrReadOnly]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
+    filter_fields =['owner', 'article_id']
+
+

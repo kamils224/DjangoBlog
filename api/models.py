@@ -61,6 +61,3 @@ class Rating(models.Model):
     rate = models.FloatField(default=0.0, validators=[MinValueValidator(0.0), MaxValueValidator(5.0)])
     article_id = models.ForeignKey(Article, on_delete=models.CASCADE)
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    def save(self, *args, **kwargs):
-        super.save(Rating,*args, **kwargs)
