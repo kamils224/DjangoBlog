@@ -65,6 +65,26 @@ class RatingViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsOwnerOrReadOnly]
     filter_backends = [django_filters.rest_framework.DjangoFilterBackend]
-    filter_fields =['owner', 'article_id']
+    filter_fields = ['owner', 'article_id']
 
+    def create(self, request, *args, **kwargs):
+        response = super(RatingViewSet, self).create(request, *args, **kwargs)
+        self.count_stars(request, create=True)
+        return response
 
+    def update(self, request, *args, **kwargs):
+        response = super(RatingViewSet, self).update(request, *args, **kwargs)
+        self.count_stars(request)
+        return response
+
+    def count_stars(self, request, create=False):
+        article = Article.objects.get(id=request.data['article_id'])
+        ratings = Rating.objects.filter(article_id=article.id)
+        average_ratio = 0.0
+        for r in ratings:
+            average_ratio += r.rate
+
+        average_ratio = average_ratio / float(len(ratings))
+        print(average_ratio)
+        article.stars = average_ratio
+        article.save()
