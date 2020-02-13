@@ -47,11 +47,11 @@
         components: {ValidationError},
         data: function () {
             return {
-                username: "jakisuser",
-                password: "password",
-                firstName: "John",
-                lastName: "Doe",
-                email: "email@example.com",
+                username: "",
+                password: "",
+                firstName: "",
+                lastName: "",
+                email: "@example.com",
                 showFailureMessage: false,
             }
         },
